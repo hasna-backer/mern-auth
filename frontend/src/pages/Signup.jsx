@@ -17,6 +17,7 @@ function Signup() {
     e.preventDefault();
     try {
       setLoading(true);
+      setError(false);
       const res = await axios.post("/api/user", formData);
       const data = await res.data;
       setLoading(false);
