@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Signup() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -20,9 +22,10 @@ function Signup() {
       setError(false);
       const res = await axios.post("/api/user", formData);
       const data = await res.data;
-      setLoading(false);
+      navigate("/login");
+      // setLoading(false);
 
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       setError(true);
       console.log(error);
