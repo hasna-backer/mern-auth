@@ -28,6 +28,55 @@ const authUser = asyncHandler(async (req, res) => {
 })
 
 /* 
+desc    Auth user and set Token
+route   POST api/users/auth
+access public
+*/
+const googleAuth = asyncHandler(async (req, res) => {
+    console.log("loginnnnn");
+
+    const { email } = req.body
+    const user = await User.findOne({ email })
+    try {
+        if (user) {
+            generateToken(res, user._id)
+            res.status(200).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email
+            })
+        } else {
+            const generatedPassword =
+                Math.random().toString(36).slice(-8) +
+                Math.random().toString(36).slice(-8);
+            // const username = req.body.name.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-8)
+
+            console.log('generatedPassword,username', generatedPassword, username);
+            console.log(req.body);
+
+            const user = await User.create({ name: req.body.name, email, password: generatedPassword, profilePicture: req.body.photo })
+            console.log('user', user);
+
+            if (user) {
+                generateToken(res, user._id)
+                res.status(200).json({
+                    _id: user._id,
+                    name: user.name,
+                    email: user.email
+                })
+
+            }
+        }
+    } catch (error) {
+        res.status(400);
+        throw new Error('Invalid email or password')
+    }
+})
+
+
+
+
+/* 
 desc    Register a new user 
 route   POST api/users
 access public
@@ -126,6 +175,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 export {
     authUser,
+    googleAuth,
     registerUser,
     logoutUser,
     getUserProfile,

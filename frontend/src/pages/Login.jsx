@@ -7,6 +7,7 @@ import {
   signInFailure,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 
 function Login() {
   const [formData, setFormData] = useState({});
@@ -112,6 +113,7 @@ function Login() {
                 {loading ? "Loading..." : "Login"}
               </button>
             </div>
+            <OAuth />
           </form>
           <p className="text-red-700 mt-3">
             {error && "Invalid credentials...!"}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import OAuth from "../components/OAuth";
 
 function Signup() {
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ function Signup() {
               >
                 Username
               </label>
-              <div className="mt-2">
+              <div className="mt-1">
                 <input
                   id="name"
                   name="name"
@@ -80,7 +81,7 @@ function Signup() {
               >
                 Email address
               </label>
-              <div className="mt-2">
+              <div className="mt-1">
                 <input
                   id="email"
                   name="email"
@@ -109,7 +110,7 @@ function Signup() {
                   </a>
                 </div>
               </div>
-              <div className="mt-2">
+              <div className="mt-1">
                 <input
                   id="password"
                   name="password"
@@ -130,6 +131,7 @@ function Signup() {
                 {loading ? "Loading..." : "Sign up"}
               </button>
             </div>
+            <OAuth />
           </form>
           <p className="text-red-700 mt-3">
             {error && "Something went wrong...!"}
