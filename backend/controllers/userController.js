@@ -7,25 +7,58 @@ desc    Auth user and set Token
 route   POST api/users/auth
 access public
 */
-const authUser = asyncHandler(async (req, res) => {
-    console.log("loginnnnn");
+// const authUser = asyncHandler(async (req, res) => {
+//     console.log("loginnnnn");
 
-    const { email, password } = req.body
-    const user = await User.findOne({ email })
-    if (user && (await user.matchPassword(password))) {
-        generateToken(res, user._id)
-        res.status(200).json({
-            _id: user._id,
-            name: user.name,
-            email: user.email
-        })
-    } else {
-        console.log("Authentication failed");
+//     const { email, password } = req.body
+//     console.log(email, password);
 
-        res.status(400);
-        throw new Error('Invalid email or password')
+//     try {
+//         const user = await User.findOne({ email })
+//         if (user && (await user.matchPassword(password))) {
+//             generateToken(res, user._id)
+//             res.status(200).json({
+//                 _id: user._id,
+//                 name: user.name,
+//                 email: user.email
+//             })
+//         }
+//         // console.log("Authentication failed");
+
+
+
+//     } catch (error) {
+//         console.log('errr:::', error);
+//         res.status(400);
+//         throw new Error('Invalid email or password')
+
+
+//     }
+// })
+const authUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (user && (await user.matchPassword(password))) {
+            generateToken(res, user._id);
+
+            res.json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                profilePicture: user.profilePicture
+
+            });
+        } else {
+            res.status(401).json({ message: 'Invalid email or password' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-})
+};
+
 
 /* 
 desc    Auth user and set Token
@@ -37,21 +70,29 @@ const googleAuth = asyncHandler(async (req, res) => {
 
     const { email } = req.body
     const user = await User.findOne({ email })
+    console.log("userexist", user);
+
     try {
+
         if (user) {
+
             generateToken(res, user._id)
             res.status(200).json({
                 _id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                profilePicture: user.profilePicture
+
             })
         } else {
+            console.log('user not exist');
+
             const generatedPassword =
                 Math.random().toString(36).slice(-8) +
                 Math.random().toString(36).slice(-8);
             // const username = req.body.name.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-8)
 
-            console.log('generatedPassword,username', generatedPassword, username);
+            console.log('generatedPassword,username', generatedPassword);
             console.log(req.body);
 
             const user = await User.create({ name: req.body.name, email, password: generatedPassword, profilePicture: req.body.photo })
@@ -62,7 +103,8 @@ const googleAuth = asyncHandler(async (req, res) => {
                 res.status(200).json({
                     _id: user._id,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    profilePicture: user.profilePicture
                 })
 
             }

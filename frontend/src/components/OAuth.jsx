@@ -16,7 +16,7 @@ function OAuth() {
         email: result.user.email,
         photo: result.user.photoURL,
       });
-      console.log("res:::", res);
+      console.log("res:::", res.data);
       dispatch(signInSuccess(res.data));
     } catch (error) {
       console.log("error", error);

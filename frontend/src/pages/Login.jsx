@@ -11,7 +11,14 @@ import OAuth from "../components/OAuth";
 
 function Login() {
   const [formData, setFormData] = useState({});
-  const { error, loading } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  // const { err, loading } = useSelector((state) => state.user);
+  // console.log("err:", error);
+  // console.log("loading:", loading);
+  // const userState = useSelector((state) => state.user);
+  // console.log("User State:", userState);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleInputs = (e) => {
@@ -22,20 +29,34 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
+    console.log("clicked");
+
     e.preventDefault();
     try {
-      dispatch(signInStart());
+      setLoading(true);
+      setError(false);
+      console.log("signInStart");
+
       const res = await axios.post("/api/user/auth", formData);
-      const data = res.data;
+      console.log("huhkgkjh");
+
+      const data = res;
       console.log("data:::::", data);
+      setLoading(false);
+
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      dispatch(signInFailure(error));
-      console.log("error.msg", error.message);
+      setError(true);
+      console.log(error);
+      setLoading(false);
+      // console.log("signInFailure");
+      // dispatch(signInFailure());
+
+      // console.log("error.msg", error.message);
     }
   };
-  console.log(formData);
+  // console.log(formData);
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -110,12 +131,14 @@ function Login() {
                 disabled={loading}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
+                {loading}
                 {loading ? "Loading..." : "Login"}
               </button>
             </div>
             <OAuth />
           </form>
           <p className="text-red-700 mt-3">
+            {error ? "trrrr" : "false"}
             {error && "Invalid credentials...!"}
           </p>
           <p className="mt-10 text-center text-sm text-gray-500">
