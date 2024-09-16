@@ -35,6 +35,7 @@ access public
 
 //     }
 // })
+
 const authUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -42,6 +43,8 @@ const authUser = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (await user.matchPassword(password))) {
+            console.log("userexist", user);
+
             generateToken(res, user._id);
 
             res.json({

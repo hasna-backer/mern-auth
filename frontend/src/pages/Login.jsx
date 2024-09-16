@@ -36,15 +36,16 @@ function Login() {
       setLoading(true);
       setError(false);
       console.log("signInStart");
+      // dispatch(signInStart());
 
       const res = await axios.post("/api/user/auth", formData);
       console.log("huhkgkjh");
 
       const data = res;
-      console.log("data:::::", data);
+      console.log("response data:", res.data);
       setLoading(false);
 
-      dispatch(signInSuccess(data));
+      dispatch(signInSuccess(res.data));
       navigate("/");
     } catch (error) {
       setError(true);
@@ -138,7 +139,6 @@ function Login() {
             <OAuth />
           </form>
           <p className="text-red-700 mt-3">
-            {error ? "trrrr" : "false"}
             {error && "Invalid credentials...!"}
           </p>
           <p className="mt-10 text-center text-sm text-gray-500">

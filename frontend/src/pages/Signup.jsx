@@ -22,7 +22,7 @@ function Signup() {
       setLoading(true);
       setError(false);
       const res = await axios.post("/api/user", formData);
-      const data = await res.data;
+      const data = res.data;
       navigate("/login");
       // setLoading(false);
 
